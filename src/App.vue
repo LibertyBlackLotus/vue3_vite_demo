@@ -1,13 +1,47 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+    <div>
+        <p>{{username}}</p>
+        <button @click="myFn1">click</button>
+
+        <p>{{age}}</p>
+        <button @click="myFn2">click</button>
+    </div>
 </template>
+
+<script>
+import { ref } from 'vue'
+export default{
+    data(){
+        return {
+            username: 'wanglin'
+        }
+    },
+
+    //option api
+    methods: {
+        myFn1(){
+            alert('abc')
+        }
+    },
+
+    /* 
+    1、setup 执行时机：
+    在beforeCretead与created之间执行
+    2、注意点：
+    - 在setup中无法访问data和methods
+    - setup中的this为undefined
+    - setup是同步的，不能是异步函数
+    */
+    setup(){ // composition api 本质是把setup中的数据和方法注入到组件中
+        let age = ref(18)
+        function myFn2(){
+            alert('my fn2')
+        }
+
+        return { age, myFn2 }
+    }
+}
+</script>
 
 <style>
 #app {
