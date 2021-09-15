@@ -1,44 +1,23 @@
 <template>
     <div>
-        <p>{{username}}</p>
-        <button @click="myFn1">click</button>
-
-        <p>{{age}}</p>
-        <button @click="myFn2">click</button>
+        <p>{{state}}</p>
+        <button @click="myFn1">click</button> 
     </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { reactive, markRaw } from 'vue'
 export default{
-    data(){
-        return {
-            username: 'wanglin'
-        }
-    },
-
-    //option api
-    methods: {
-        myFn1(){
-            alert('abc')
-        }
-    },
-
-    /* 
-    1、setup 执行时机：
-    在beforeCretead与created之间执行
-    2、注意点：
-    - 在setup中无法访问data和methods
-    - setup中的this为undefined
-    - setup是同步的，不能是异步函数
-    */
     setup(){ // composition api 本质是把setup中的数据和方法注入到组件中
-        let age = ref(18)
-        function myFn2(){
-            alert('my fn2')
+        let obj = { name: 'wanglin', age: 18}  
+        obj = markRaw(obj) //ojb将不会响应式
+        let state = reactive(obj) //这里state 本质是一个Proxy对象，在这个Proxy对象中引用了obj 
+
+        function myFn1(){
+            state.name = 'lin'  //直接修改obj，无法触发state在UI的更新 
         }
 
-        return { age, myFn2 }
+        return { state, myFn1 }
     }
 }
 </script>
